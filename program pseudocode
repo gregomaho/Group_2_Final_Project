@@ -1,0 +1,95 @@
+START PROGRAM
+
+SETUP:
+- DEFINE dictionary CALENDAR (key: date string "YYYY-MM-DD", value: recipe object)
+- DEFINE list RECIPE_BOOK
+- DEFINE constant SHOPPING_LIST_FILE = "shopping_list.txt"
+- DEFINE constant RECIPE_FOLDER = "saved_recipes"
+- DEFINE dictionary CATEGORIES for sorting ingredients (dairy, bread, meats, vegetables, baking)
+- IF RECIPE_FOLDER does not exist:
+    - CREATE folder RECIPE_FOLDER
+
+FUNCTION display_main_menu():
+    DISPLAY options:
+        1. View Calendar
+        2. Assign Recipe to a Day
+        3. View Saved Recipes
+        4. Generate Weekly Shopping List
+        5. View Specific Day
+        6. Exit
+
+FUNCTION input_recipe():
+    PROMPT user for recipe name
+    PROMPT user for ingredients (comma-separated)
+    PARSE ingredients into a list
+    CREATE recipe = { name, ingredients }
+    ADD recipe to RECIPE_BOOK
+    SAVE recipe to text file inside RECIPE_FOLDER
+    RETURN recipe
+
+FUNCTION choose_saved_recipe():
+    IF RECIPE_BOOK is empty:
+        DISPLAY "No saved recipes"
+        RETURN NULL
+    DISPLAY all saved recipes with index
+    PROMPT user for index
+    RETURN selected recipe
+
+FUNCTION assign_recipe_to_day():
+    PROMPT user for date (YYYY-MM-DD)
+    VALIDATE date format
+    PROMPT user to enter new recipe or select saved one
+    CALL appropriate recipe input/selection
+    ASSIGN recipe to CALENDAR under selected date
+
+FUNCTION view_calendar():
+    PROMPT user for month and year
+    DISPLAY calendar grid with weekdays (Sun to Sat)
+    FOR each day:
+        IF day has assigned recipe:
+            DISPLAY as [day]
+        ELSE:
+            DISPLAY as day
+
+FUNCTION view_saved_recipes():
+    IF RECIPE_BOOK is empty:
+        DISPLAY message
+    ELSE:
+        DISPLAY all recipe names
+
+FUNCTION view_specific_day():
+    PROMPT for date
+    IF recipe exists in CALENDAR:
+        DISPLAY recipe name and ingredients
+    ELSE:
+        DISPLAY "No recipe assigned"
+
+FUNCTION categorize_ingredient(ingredient):
+    FOR each category in CATEGORIES:
+        IF ingredient contains any keyword in category:
+            RETURN category
+    RETURN "other"
+
+FUNCTION generate_shopping_list():
+    PROMPT user for start date of the week (YYYY-MM-DD)
+    FOR 7 days starting from start_date:
+        IF date has a recipe in CALENDAR:
+            ADD each ingredient to a counter dictionary
+
+    GROUP ingredients into categories using categorize_ingredient()
+    DISPLAY shopping list grouped by category with counts
+    SAVE the same list to SHOPPING_LIST_FILE
+
+MAIN LOOP:
+WHILE True:
+    CALL display_main_menu()
+    PROMPT user for choice
+    IF choice == 1: CALL view_calendar()
+    IF choice == 2: CALL assign_recipe_to_day()
+    IF choice == 3: CALL view_saved_recipes()
+    IF choice == 4: CALL generate_shopping_list()
+    IF choice == 5: CALL view_specific_day()
+    IF choice == 6: DISPLAY "Goodbye!" and BREAK
+    ELSE: DISPLAY "Invalid option"
+
+END PROGRAM
