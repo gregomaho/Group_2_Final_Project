@@ -1,0 +1,22 @@
+
+Bread:
+- hamburger buns x1
+
+Dairy:
+- butter x1
+- sliced cheese x1
+
+Meats:
+- chicken thighs x1
+- ground beef x1
+
+Other:
+- soy sauce x1
+- rice wine x1
+- ketchup x1
+- mustard x1
+- pickles x1
+
+Vegetables:
+- broccoli x1
+- onion x1

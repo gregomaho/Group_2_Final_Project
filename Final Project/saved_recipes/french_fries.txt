@@ -1,0 +1,5 @@
+Recipe: french fries
+Ingredients:
+- potatoes
+- oil
+- salt
